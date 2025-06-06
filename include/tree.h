@@ -19,19 +19,9 @@ class PMTree {
         ~Node();
     };
     Node* root;
-    void PMTree::generatePerms(Node* node, const std::vector<char>& elems,
-                         std::vector<std::vector<char>>& path) const {
-    if (elems.empty() || !node) return;
-    for (char elem : elems) {
-        Node* child = new Node(elem);
-        if (!child) continue;
-        node->children.push_back(child);
-        std::vector<char> remaining = elems;
-        remaining.erase(std::remove(remaining.begin(), remaining.end(), elem),
-                      remaining.end());
-        generatePerms(child, remaining, path);
-    }
-}
+    void generatePerms(Node* node,
+const std::vector<char>& elems,
+std::vector<std::vector<char>>& path) const;
     bool getPerm1Helper(Node* node, int& count, int num,
                        std::vector<char>& path) const;
     bool getPerm2Helper(Node* node, int& count, int num,
