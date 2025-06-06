@@ -39,19 +39,19 @@ void PMTree::clear(Node* node) {
     delete node;
 }
 
-void PMTree::generatePerms(Node* node, std::vector<char>& elems,
-                          std::vector<std::vector<char>>& path) const {
-    if (elems.empty()) return;
+void PMTree::generatePerms(Node* node, const std::vector<char>& elems,
+                         std::vector<std::vector<char>>& path) const {
+    if (elems.empty() || !node) return;
     for (char elem : elems) {
+        Node* child = new Node(elem);
         if (!child) continue;
         node->children.push_back(child);
         std::vector<char> remaining = elems;
         remaining.erase(std::remove(remaining.begin(), remaining.end(), elem),
-                       remaining.end());
+                      remaining.end());
         generatePerms(child, remaining, path);
     }
 }
-
 std::vector<std::vector<char>> PMTree::getAllPerms() const {
     std::vector<std::vector<char>> path;
     std::vector<char> current;
