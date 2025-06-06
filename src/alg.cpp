@@ -20,13 +20,16 @@ PMTree::~PMTree() = default;
 void PMTree::generatePerms(Node* node, std::vector<char>& elems,
                          std::vector<std::vector<char>>& path) const {
     if (elems.empty()) {
-        std::vector<char> current;
-        Node* n = node;
-        while (n && n->value != '\0') {
-            current.push_back(n->value);
-            n = n->children.empty() ? nullptr : n->children[0].get();
+        std::vector<char> current_path;
+        Node* current = node;
+        while (current && current->value != '\0') {
+            current_path.push_back(current->value);
+            if (current->children.empty()) break;
+            current = current->children[0].get();
         }
-        if (!current.empty()) path.push_back(current);
+        if (!current_path.empty()) {
+            path.push_back(current_path);
+        }
         return;
     }
     for (size_t i = 0; i < elems.size(); ++i) {
@@ -41,12 +44,13 @@ void PMTree::generatePerms(Node* node, std::vector<char>& elems,
 
 std::vector<std::vector<char>> PMTree::getAllPerms() const {
     std::vector<std::vector<char>> path;
-    if (!root) return path;
+    if (!root || root->children.empty()) return path;
     std::vector<char> elems;
     for (const auto& child : root->children) {
         elems.push_back(child->value);
     }
-    generatePerms(root.get(), elems, path);
+    auto temp_root = std::make_unique<Node>('\0');
+    generatePerms(temp_root.get(), elems, path);
     return path;
 }
 
