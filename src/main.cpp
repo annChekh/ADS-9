@@ -13,7 +13,7 @@ int main() {
         }
         std::cout << std::endl;
     }
-   std::vector<char> perm1 = getPerm1(pTree, 1);
+    std::vector<char> perm1 = getPerm1(pTree, 1);
     std::cout << "\nPermutation 1:" << std::endl;
     for (char c : perm1) {
         std::cout << c << " ";
