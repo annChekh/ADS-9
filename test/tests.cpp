@@ -4,31 +4,32 @@
 #include <vector>
 
 #include "tree.h"
-TEST(PMTreeTest, BasicPermutations) {
+TEST(PMTreeTest, BasicFunctionality) {
     std::vector<char> elements = {'A', 'B', 'C'};
     PMTree tree(elements);
-    auto all_perms = tree.getAllPerms();
-    ASSERT_EQ(all_perms.size(), 6);
-    std::set<std::vector<char>> unique_perms(all_perms.begin(), all_perms.end());
-    ASSERT_EQ(unique_perms.size(), 6);
+    auto all_paths = tree.getAllPerms();
+    ASSERT_EQ(all_paths.size(), 6);
+    std::set<std::vector<char>> unique_paths(all_paths.begin(), all_paths.end());
+    ASSERT_EQ(unique_paths.size(), 6);
+    std::vector<char> path1 = tree.getPerm1(1);
+    ASSERT_EQ(path1.size(), 3);
+    std::vector<char> path2 = tree.getPerm2(2);
+    ASSERT_EQ(path2.size(), 3);
 }
+
 TEST(PMTreeTest, EdgeCases) {
-    {
-        PMTree empty_tree({});
-        auto perms = empty_tree.getAllPerms();
-        ASSERT_TRUE(perms.empty());
-    }
-    {
-        PMTree single_tree({'X'});
-        auto perms = single_tree.getAllPerms();
-        ASSERT_EQ(perms.size(), 1);
-        ASSERT_EQ(perms[0].size(), 1);
-    }
+    PMTree empty_tree({});
+    ASSERT_TRUE(empty_tree.getAllPerms().empty());
+    PMTree single_tree({'X'});
+    auto single_paths = single_tree.getAllPerms();
+    ASSERT_EQ(single_paths.size(), 1);
+    ASSERT_EQ(single_paths[0].size(), 1);
 }
 
 TEST(PMTreeTest, InvalidRequests) {
-    std::vector<char> elements = {'1', '2'};
-    PMTree tree(elements);
-    ASSERT_TRUE(tree.getPerm1(5).empty());
+    PMTree tree({'A', 'B'});
+    ASSERT_TRUE(tree.getPerm1(0).empty());
+    ASSERT_TRUE(tree.getPerm1(3).empty());
     ASSERT_TRUE(tree.getPerm2(0).empty());
+    ASSERT_TRUE(tree.getPerm2(3).empty());
 }
