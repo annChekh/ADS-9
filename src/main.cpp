@@ -1,19 +1,19 @@
 // Copyright 2022 NNTU-CS
-#include <algorithm>
-#include <chrono>
 #include <iostream>
+#include <algorithm>
 #include <vector>
+#include <chrono>
 #include "tree.h"
 
 int main() {
   std::vector<char> elems = {'A', 'B', 'C'};
   PMTree pTree(elems);
   std::vector<std::vector<char>> res = pTree.getAllPerms();
-  for (const auro& perm : res) {
+  for (const auto& perm : res) {
     for (char c : perm) {
       std::cout << c;
     }
-    std::cout << '\n';
+    std::cout << std::endl;
   }
   std::vector<char> perm1 = pTree.getPerm1(1);
   std::cout << "Permutation 1: ";
