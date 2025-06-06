@@ -5,8 +5,8 @@
 
 #include "tree.h"
 TEST(PMTreeTest, BasicFunctionality) {
-    std::vector<char> elements = {'A', 'B', 'C'};
-    PMTree tree(elements);
+    std::vector<char> elems = {'A', 'B', 'C'};
+    PMTree tree(elems);
     auto permutations = tree.getAllPerms();
     ASSERT_EQ(permutations.size(), 6) <<;
     std::set<std::vector<char>> unique_perms(permutations.begin(), permutations.end());
