@@ -6,102 +6,89 @@
 #include  <algorithm>
 #include  <vector>
 #include  "tree.h"
-PMTree::PMTree(const std::vector<char>& elems) {
-  root = new Node('\0');
-  std::vector<std::vector<char>> temp;
-  generatePerms(root, const_cast<std::vector<char>&>(elems), temp);
+PMTree::PMTree(const std::vector<char>& elements) : root(new Node('\0')) {
+    std::vector<std::vector<char>> temp;
+    generatePerms(root, const_cast<std::vector<char>&>(elements), temp);
 }
+
+PMTree::~PMTree() {
+    clear(root);
+}
+
 std::vector<std::vector<char>> PMTree::getAllPerms() const {
-    std::vector<std::vector<char>> res;
-    std::vector<char> curr;
-    generatePerms(root, curr, res);
-    return res;
-}
-void PMTree::buildTree(const std::vector<char>& elems) {
-  generatePerms(root, elems, {});
+    std::vector<std::vector<char>> result;
+    std::vector<char> current;
+    generatePerms(root, current, result);
+    return result;
 }
 
-void PMTree::generatePerms(Node* node,
-std::vector<char>& curr,
-std::vector<std::vector<char>>& res) {
-    if (curr.empty()) {
+void PMTree::generatePerms(Node* node, std::vector<char>& current,
+                         std::vector<std::vector<char>>& result) const {
+    if (current.empty()) {
         return;
     }
-
-    for (char c : curr) {
-        Node* child = new Node(c);
+    for (char elem : current) {
+        Node* child = new Node(elem);
         node->children.push_back(child);
-        std::vector<char> remaining = curr;
-        remaining.erase(
-          std::remove(remaining.begin(), remaining.end(), c),
-          remaining.end());
-        generatePerms(child, remaining, res);
+        std::vector<char> remaining = current;
+        remaining.erase(std::remove(remaining.begin(), remaining.end(), elem), 
+                       remaining.end());
+        generatePerms(child, remaining, result);
     }
 }
 
-std::vector<std::vector<char>> PMTree::getAllPerms() {
-    std::vector<std::vector<char>> res;
-    std::vector<char> curr;
-    generatePerms(root, curr, res);
-    return res;
+std::vector<char> PMTree::getPerm1(int num) const {
+    std::vector<char> path;
+    int count = 0;
+    getPerm1Helper(root, count, num, path);
+    return path;
 }
 
-std::vector<char> PMTree::getPerm1(int n) {
-    std::vector<char> res;
-    int cnt = 0;
-    getPerm1Helper(root, cnt, n, res);
-    return res;
-}
-
-void PMTree::getPerm1Helper(Node* node,
-int& cnt,
-int n,
-std::vector<char>& res) {
-    if (cnt >= n) return;
-
+bool PMTree::getPerm1Helper(Node* node, int& count, int target,
+                          std::vector<char>& path) const {
+    if (count >= target) return true;
     if (node->children.empty()) {
-        cnt++;
-        if (cnt == n) {
-            res.push_back(node->value);
+        if (++count == target) {
+            path.push_back(node->value);
+            return true;
         }
-        return;
+        return false;
     }
-
     for (Node* child : node->children) {
-        res.push_back(child->value);
-        getPerm1Helper(child, cnt, n, res);
-        if (cnt >= n) return;
-        res.pop_back();
+        path.push_back(child->value);
+        if (getPerm1Helper(child, count, target, path)) {
+            return true;
+        }
+        path.pop_back();
     }
+    return false;
 }
 
-std::vector<char> PMTree::getPerm2(int n) {
-    std::vector<char> res;
-    int cnt = 0;
-    getPerm2Helper(root, cnt, n, res);
-    return res;
+std::vector<char> PMTree::getPerm2(int num) const {
+    std::vector<char> path;
+    int count = 0;
+    getPerm2Helper(root, count, num, path);
+    return path;
 }
 
-void PMTree::getPerm2Helper(Node* node,
-int& cnt,
-int n,
-std::vector<char>& res) {
-    if (cnt >= n) return;
-
+bool PMTree::getPerm2Helper(Node* node, int& count, int target,
+                          std::vector<char>& path) const {
+    if (count >= target) return true;
     if (node->children.empty()) {
-        cnt++;
-        if (cnt == n) {
-            res.push_back(node->value);
+        if (++count == target) {
+            path.push_back(node->value);
+            return true;
         }
-        return;
+        return false;
     }
-
     for (Node* child : node->children) {
-        res.push_back(child->value);
-        getPerm2Helper(child, cnt, n, res);
-        if (cnt >= n) return;
-        res.pop_back();
+        path.push_back(child->value);
+        if (getPerm2Helper(child, count, target, path)) {
+            return true;
+        }
+        path.pop_back();
     }
+    return false;
 }
 
 void PMTree::clear(Node* node) {
@@ -109,8 +96,4 @@ void PMTree::clear(Node* node) {
         clear(child);
     }
     delete node;
-}
-
-PMTree::~PMTree() {
-    clear(root);
 }
