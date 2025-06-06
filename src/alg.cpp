@@ -4,7 +4,7 @@
 #include  <locale>
 #include  <cstdlib>
 #include  "tree.h"
-
+#include  <vector>
 PMTree::PMTree(const std::vector<char>& elements) {
   root = new Node('\0');
   buildTree(elements);
@@ -14,7 +14,9 @@ void PMTree::buildTree(const std::vector<char>& elements) {
   generatePerms(root, elements, {});
 }
 
-void PMTree::generatePerms(Node* node, std::vector<char>& curr, std::vector<std::vector<char>>& res) {
+void PMTree::generatePerms(Node* node,
+std::vector<char>& curr,
+std::vector<std::vector<char>>& res) {
     if (curr.empty()) {
         return;
     }
@@ -22,10 +24,10 @@ void PMTree::generatePerms(Node* node, std::vector<char>& curr, std::vector<std:
     for (char c : curr) {
         Node* child = new Node(c);
         node->children.push_back(child);
-        
         std::vector<char> remaining = curr;
-        remaining.erase(std::remove(remaining.begin(), remaining.end(), c), remaining.end());
-        
+        remaining.erase(
+          std::remove(remaining.begin(), remaining.end(), c),
+          remaining.end());
         generatePerms(child, remaining, res);
     }
 }
@@ -44,7 +46,10 @@ std::vector<char> PMTree::getPerm1(int n) {
     return res;
 }
 
-void PMTree::getPerm1Helper(Node* node, int& cnt, int n, std::vector<char>& res) {
+void PMTree::getPerm1Helper(Node* node,
+int& cnt,
+int n,
+std::vector<char>& res) {
     if (cnt >= n) return;
 
     if (node->children.empty()) {
@@ -70,7 +75,10 @@ std::vector<char> PMTree::getPerm2(int n) {
     return res;
 }
 
-void PMTree::getPerm2Helper(Node* node, int& cnt, int n, std::vector<char>& res) {
+void PMTree::getPerm2Helper(Node* node,
+int& cnt,
+int n,
+std::vector<char>& res) {
     if (cnt >= n) return;
 
     if (node->children.empty()) {
