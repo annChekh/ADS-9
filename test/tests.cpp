@@ -9,12 +9,9 @@ TEST(PMTreeTest, BasicPermutations) {
     PMTree tree(elements);
     auto all_perms = tree.getAllPerms();
     ASSERT_EQ(all_perms.size(), 6);
-    std::vector<char> perm1 = tree.getPerm1(1);
-    ASSERT_EQ(perm1.size(), 3);
-    std::vector<char> perm2 = tree.getPerm2(2);
-    ASSERT_EQ(perm2.size(), 3);
+    std::set<std::vector<char>> unique_perms(all_perms.begin(), all_perms.end());
+    ASSERT_EQ(unique_perms.size(), 6);
 }
-
 TEST(PMTreeTest, EdgeCases) {
     {
         PMTree empty_tree({});
