@@ -6,6 +6,14 @@
 #include  <algorithm>
 #include  <vector>
 #include  "tree.h"
+PMTree::Node::Node(char val) : value(val) {}
+
+PMTree::Node::~Node() {
+    for (Node* child : children) {
+        delete child;
+    }
+}
+
 PMTree::PMTree(const std::vector<char>& elems) : root(new Node('\0')) {
     std::vector<std::vector<char>> path;
     generatePerms(root, const_cast<std::vector<char>&>(elems), path);
@@ -13,14 +21,6 @@ PMTree::PMTree(const std::vector<char>& elems) : root(new Node('\0')) {
 
 PMTree::~PMTree() {
     clear(root);
-}
-
-PMTree::Node::Node(char val) : value(val) {}
-
-PMTree::Node::~Node() {
-    for (Node* child : children) {
-        delete child;
-    }
 }
 
 void PMTree::clear(Node* node) {
