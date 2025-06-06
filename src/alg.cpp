@@ -3,8 +3,9 @@
 #include  <fstream>
 #include  <locale>
 #include  <cstdlib>
-#include  "tree.h"
+#include  <algorithm>
 #include  <vector>
+#include  "tree.h"
 PMTree::PMTree(const std::vector<char>& elements) {
   root = new Node('\0');
   buildTree(elements);
