@@ -16,6 +16,7 @@ class PMTree {
       char value;
       std::vector<Node*> children;
       explicit Node(char val);
+      ~Node();
     };
 
     Node* root;
