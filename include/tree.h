@@ -10,7 +10,7 @@ class PMTree {
     std::vector<char> getPerm1(int n) const;
     std::vector<char> getPerm2(int n) const;
 
-private:
+ private:
     struct Node {
       explicit Node(char val);
         ~Node();
