@@ -6,9 +6,9 @@
 #include  <algorithm>
 #include  <vector>
 #include  "tree.h"
-PMTree::PMTree(const std::vector<char>& elements) : root(new Node('\0')) {
+PMTree::PMTree(const std::vector<char>& elems) : root(new Node('\0')) {
     std::vector<std::vector<char>> temp;
-    generatePerms(root, const_cast<std::vector<char>&>(elements), temp);
+    generatePerms(root, const_cast<std::vector<char>&>(elems), temp);
 }
 
 PMTree::~PMTree() {
@@ -47,6 +47,7 @@ void PMTree::generatePerms(Node* node, std::vector<char>& current,
 
 std::vector<char> PMTree::getPerm1(int num) const {
     std::vector<char> path;
+    if (!root || num <= 0) return path;
     int count = 0;
     getPerm1Helper(root, count, num, path);
     return path;
@@ -74,6 +75,7 @@ bool PMTree::getPerm1Helper(const Node* node, int& count, int target,
 
 std::vector<char> PMTree::getPerm2(int num) const {
     std::vector<char> path;
+    if (!root || num <= 0) return path;
     int count = 0;
     getPerm2Helper(root, count, num, path);
     return path;
@@ -100,16 +102,17 @@ bool PMTree::getPerm2Helper(const Node* node, int& count, int target,
 }
 
 void PMTree::clear(Node* node) {
+    if (!node) return;
     for (Node* child : node->children) {
         clear(child);
     }
     delete node;
 }
 
-std::vector<char> getPerm1(PMTree& tree, int n) {
+std::vector<char> getPerm1(PMTree& tree, int num) {
     return tree.getPerm1(n);
 }
 
-std::vector<char> getPerm2(PMTree& tree, int n) {
+std::vector<char> getPerm2(PMTree& tree, int num) {
     return tree.getPerm2(n);
 }
