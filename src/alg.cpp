@@ -102,9 +102,11 @@ bool PMTree::getPerm2Helper(Node* node, int& count, int num,
 }
 
 std::vector<char> getPerm1(PMTree& tree, int num) {
+    if (num <= 0) return {};
     return tree.getPerm1(num);
 }
 
 std::vector<char> getPerm2(PMTree& tree, int num) {
+    if (num <= 0) return {};
     return tree.getPerm2(num);
 }
