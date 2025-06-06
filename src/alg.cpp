@@ -15,6 +15,14 @@ PMTree::~PMTree() {
     clear(root);
 }
 
+PMTree::Node::Node(char val) : value(val) {}
+
+PMTree::Node::~Node() {
+    for (Node* child : children) {
+        delete child;
+    }
+}
+
 void PMTree::clear(Node* node) {
     if (!node) return;
     for (Node* child : node->children) {
