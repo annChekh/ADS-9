@@ -1,94 +1,82 @@
 // Copyright 2022 NNTU-CS
 #include  <iostream>
-#include  <fstream>
-#include  <locale>
-#include  <cstdlib>
 #include  <algorithm>
-#include <stdexcept>
 #include  <vector>
 #include  "tree.h"
-PMTree::Node::Node(char val) : value(val) {}
+TreeNode::TreeNode(char l) : label(l) {}
 
-PMTree::PMTree(const std::vector<char>& elems) : root(std::make_unique<Node>('\0')) {
-    if (elems.empty()) return;
-    std::vector<char> remaining = elems;
-    generatePerms(root.get(), remaining, {});
+TreeNode::~TreeNode() {
+    for (auto s : subnodes)
+        delete s;
 }
 
-PMTree::~PMTree() = default;
+PMTree::PMTree(const std::vector<char>& chars) {
+    base = new TreeNode(' ');
+    expand(base, chars);
+}
 
-void PMTree::generatePerms(Node* node, std::vector<char>& remaining,
-                         std::vector<char> current) const {
-    if (!node) return;
-    if (node->value != '\0') {
-        current.push_back(node->value);
-    }
-    if (remaining.empty()) {
-        if (!current.empty()) {
-            const_cast<std::vector<std::vector<char>>&>(getAllPerms()).push_back(current);
-        }
-        return;
-    }
-    for (size_t i = 0; i < remaining.size(); ++i) {
-        auto child = std::make_unique<Node>(remaining[i]);
-        std::vector<char> new_remaining = remaining;
-        new_remaining.erase(new_remaining.begin() + i);
-        generatePerms(child.get(), new_remaining, current);
-        node->children.push_back(std::move(child));
+PMTree::~PMTree() {
+    delete base;
+}
+
+void PMTree::expand(TreeNode* node, std::vector<char> rem) {
+    std::sort(rem.begin(), rem.end());
+    for (char c : rem) {
+        TreeNode* sn = new TreeNode(c);
+        node->subnodes.push_back(sn);
+        std::vector<char> next = rem;
+        next.erase(std::find(next.begin(), next.end(), c));
+        expand(sn, next);
     }
 }
 
-std::vector<std::vector<char>> PMTree::getAllPerms() const {
-    static std::vector<std::vector<char>> all_perms;
-    all_perms.clear();
-    if (root && !root->children.empty()) {
-        std::vector<char> empty;
-        for (const auto& child : root->children) {
-            std::vector<char> remaining;
-            for (const auto& sibling : root->children) {
-                if (sibling.get() != child.get()) {
-                    remaining.push_back(sibling->value);
-                }
-            }
-            generatePerms(child.get(), remaining, empty);
-        }
+void PMTree::traverse(TreeNode* node,
+                      std::vector<char>& path,
+                      std::vector<std::vector<char>>& out) {
+    if (node->label != ' ')
+        path.push_back(node->label);
+    if (node->subnodes.empty()) {
+        out.push_back(path);
+    } else {
+        for (auto sn : node->subnodes)
+            traverse(sn, path, out);
     }
-    return all_perms;
-}
-
-
-std::vector<char> PMTree::getPerm1(int num) const {
-    std::vector<char> path;
-    if (num <= 0 || !root) return path;
-    int count = 0;
-    getPermHelper(root.get(), count, num, path, true);
-    return path;
-}
-
-std::vector<char> PMTree::getPerm2(int num) const {
-    std::vector<char> path;
-    if (num <= 0 || !root) return path;
-    int count = 0;
-    getPermHelper(root.get(), count, num, path, false);
-    return path;
-}
-
-bool PMTree::getPermHelper(Node* node, int& count, int num,
-                          std::vector<char>& path, bool usePerm1) const {
-    if (count >= num) return true;
-    if (node->children.empty()) {
-        if (++count == num) {
-            path.push_back(node->value);
-            return true;
-        }
-        return false;
-    }
-    for (const auto& child : node->children) {
-        path.push_back(child->value);
-        if (getPermHelper(child.get(), count, num, path, usePerm1)) {
-            return true;
-        }
+    if (!path.empty() && node->label != ' ')
         path.pop_back();
+}
+
+std::vector<std::vector<char>> getAllPerms(PMTree& tree) {
+    std::vector<std::vector<char>> output;
+    std::vector<char> temp;
+    tree.traverse(tree.base, temp, output);
+    return output;
+}
+
+std::vector<char> getPerm1(PMTree& tree, int num) {
+    auto perms = getAllPerms(tree);
+    return(num > 0 && num <= perms.size()) ?
+        perms[num-1] : std::vector<char>{};
+}
+
+std::vector<char> PMTree::fetch_by_order(TreeNode* node, int& count, int num) {
+    if (node->subnodes.empty()) {
+        ++count;
+        return(count == num) ? std::vector<char>{node->label}
+            : std::vector<char>{};
     }
-    return false;
+    for (auto sn : node->subnodes) {
+        auto res = fetch_by_order(sn, count, num);
+        if (!res.empty()) {
+            if (node->label != ' ') {
+                res.insert(res.begin(), node->label);
+            }
+            return res;
+        }
+    }
+    return {};
+}
+
+std::vector<char> getPerm2(PMTree& tree, int num) {
+    int count = 0;
+    return tree.fetch_by_order(tree.base, count, num);
 }
