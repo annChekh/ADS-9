@@ -110,9 +110,9 @@ void PMTree::clear(Node* node) {
 }
 
 std::vector<char> getPerm1(PMTree& tree, int num) {
-    return tree.getPerm1(n);
+    return tree.getPerm1(num);
 }
 
 std::vector<char> getPerm2(PMTree& tree, int num) {
-    return tree.getPerm2(n);
+    return tree.getPerm2(num);
 }
