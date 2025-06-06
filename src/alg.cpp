@@ -6,13 +6,19 @@
 #include  <algorithm>
 #include  <vector>
 #include  "tree.h"
-PMTree::PMTree(const std::vector<char>& elements) {
+PMTree::PMTree(const std::vector<char>& elems) {
   root = new Node('\0');
-  buildTree(elements);
+  std::vector<std::vector<char>> temp;
+  generatePerms(root, const_cast<std::vector<char>&>(elems), temp);
 }
-
-void PMTree::buildTree(const std::vector<char>& elements) {
-  generatePerms(root, elements, {});
+std::vector<std::vector<char>> PMTree::getAllPerms() const {
+    std::vector<std::vector<char>> res;
+    std::vector<char> curr;
+    generatePerms(root, curr, res);
+    return res;
+}
+void PMTree::buildTree(const std::vector<char>& elems) {
+  generatePerms(root, elems, {});
 }
 
 void PMTree::generatePerms(Node* node,
