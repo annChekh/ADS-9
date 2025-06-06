@@ -15,6 +15,14 @@ PMTree::~PMTree() {
     clear(root);
 }
 
+PMTree::Node::Node(char val) : value(val) {}
+
+PMTree::Node::~Node() {
+    for (Node* child : children) {
+        delete child;
+    }
+}
+
 std::vector<std::vector<char>> PMTree::getAllPerms() const {
     std::vector<std::vector<char>> result;
     std::vector<char> current;
