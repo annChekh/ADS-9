@@ -4,55 +4,58 @@
 #include  <locale>
 #include  <cstdlib>
 #include  <algorithm>
+#include <stdexcept>
 #include  <vector>
 #include  "tree.h"
 PMTree::Node::Node(char val) : value(val) {}
 
 PMTree::PMTree(const std::vector<char>& elems) : root(std::make_unique<Node>('\0')) {
     if (elems.empty()) return;
-    std::vector<std::vector<char>> path;
-    std::vector<char> elems_copy = elems;
-    generatePerms(root.get(), elems_copy, path);
+    std::vector<char> remaining = elems;
+    generatePerms(root.get(), remaining, {});
 }
 
 PMTree::~PMTree() = default;
 
-void PMTree::generatePerms(Node* node, std::vector<char>& elems,
-                         std::vector<std::vector<char>>& path) const {
-    if (elems.empty()) {
-        std::vector<char> current_path;
-        Node* current = node;
-        while (current && current->value != '\0') {
-            current_path.push_back(current->value);
-            if (current->children.empty()) break;
-            current = current->children[0].get();
-        }
-        if (!current_path.empty()) {
-            path.push_back(current_path);
+void PMTree::generatePerms(Node* node, std::vector<char>& remaining,
+                         std::vector<char> current) const {
+    if (!node) return;
+    if (node->value != '\0') {
+        current.push_back(node->value);
+    }
+    if (remaining.empty()) {
+        if (!current.empty()) {
+            const_cast<std::vector<std::vector<char>>&>(getAllPerms()).push_back(current);
         }
         return;
     }
-    for (size_t i = 0; i < elems.size(); ++i) {
-        auto child = std::make_unique<Node>(elems[i]);
-        Node* child_ptr = child.get();
+    for (size_t i = 0; i < remaining.size(); ++i) {
+        auto child = std::make_unique<Node>(remaining[i]);
+        std::vector<char> new_remaining = remaining;
+        new_remaining.erase(new_remaining.begin() + i);
+        generatePerms(child.get(), new_remaining, current);
         node->children.push_back(std::move(child));
-        std::vector<char> remaining = elems;
-        remaining.erase(remaining.begin() + i);
-        generatePerms(child_ptr, remaining, path);
     }
 }
 
 std::vector<std::vector<char>> PMTree::getAllPerms() const {
-    std::vector<std::vector<char>> path;
-    if (!root || root->children.empty()) return path;
-    std::vector<char> elems;
-    for (const auto& child : root->children) {
-        elems.push_back(child->value);
+    static std::vector<std::vector<char>> all_perms;
+    all_perms.clear();
+    if (root && !root->children.empty()) {
+        std::vector<char> empty;
+        for (const auto& child : root->children) {
+            std::vector<char> remaining;
+            for (const auto& sibling : root->children) {
+                if (sibling.get() != child.get()) {
+                    remaining.push_back(sibling->value);
+                }
+            }
+            generatePerms(child.get(), remaining, empty);
+        }
     }
-    auto temp_root = std::make_unique<Node>('\0');
-    generatePerms(temp_root.get(), elems, path);
-    return path;
+    return all_perms;
 }
+
 
 std::vector<char> PMTree::getPerm1(int num) const {
     std::vector<char> path;
