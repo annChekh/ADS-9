@@ -53,6 +53,7 @@ std::vector<std::vector<char>> PMTree::getAllPerms() const {
 
 std::vector<char> PMTree::getPerm1(int num) const {
     std::vector<char> path;
+    if (!root || num <= 0) return path;
     int count = 0;
     getPerm1Helper(root, count, num, path);
     return path;
@@ -78,6 +79,7 @@ bool PMTree::getPerm1Helper(Node* node, int& count, int num,
 
 std::vector<char> PMTree::getPerm2(int num) const {
     std::vector<char> path;
+    if (!root || num <= 0) return path;
     int count = 0;
     getPerm2Helper(root, count, num, path);
     return path;
