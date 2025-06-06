@@ -27,3 +27,4 @@ TEST(ads9, test4) {
   PMTree tree(std::vector<char>{'1', '2', '3'});
   std::vector<char> result = getPerm2(tree, 8);
   ASSERT_EQ(result.size(), 0);
+}
