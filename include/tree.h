@@ -3,8 +3,8 @@
 #define INCLUDE_TREE_H_
 #include <vector>
 class PMTree {
-public:
-    PMTree(const std::vector<char>& elems);
+ public:
+    explicit PMTree(const std::vector<char>& elems);
     ~PMTree();
     std::vector<std::vector<char>> getAllPerms() const;
     std::vector<char> getPerm1(int n) const;
@@ -12,10 +12,10 @@ public:
 
 private:
     struct Node {
+      explicit Node(char val);
+        ~Node();
         char value;
         std::vector<Node*> children;
-        Node(char val);
-        ~Node();
     };
 
     Node* root;
@@ -29,5 +29,5 @@ std::vector<char>& res) const;
 int& cnt, int n,
 std::vector<char>& res) const;
     void clear(Node* node);
-};    
+};
 #endif  // INCLUDE_TREE_H_
