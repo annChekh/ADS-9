@@ -24,7 +24,7 @@ PMTree::PMTree(const std::vector<char>& elems) : root(nullptr) {
 }
 
 PMTree::~PMTree() {
-   if (root) {
+    if (root) {
         clear(root);
     }
 }
