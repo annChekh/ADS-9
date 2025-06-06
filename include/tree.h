@@ -31,6 +31,6 @@ int& count, int target,
 std::vector<char>& path) const;
     void clear(Node* node);
 };
-std::vector<char> getPerm1(PMTree& tree, int n);
-std::vector<char> getPerm2(PMTree& tree, int n);
+std::vector<char> getPerm1(PMTree& tree, int num);
+std::vector<char> getPerm2(PMTree& tree, int num);
 #endif  // INCLUDE_TREE_H_
