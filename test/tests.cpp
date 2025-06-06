@@ -5,12 +5,15 @@
 
 #include "tree.h"
 TEST(PMTreeTest, BasicFunctionality) {
-    std::vector<char> elements = {'A', 'B', 'C'};
-    PMTree tree(elements);
+    std::vector<char> elems = {'A', 'B', 'C'};
+    PMTree tree(elems);
     auto all_paths = tree.getAllPerms();
     ASSERT_EQ(all_paths.size(), 6);
     std::set<std::vector<char>> unique_paths(all_paths.begin(), all_paths.end());
     ASSERT_EQ(unique_paths.size(), 6);
+    for (const auto& p : all_paths) {
+        ASSERT_EQ(p.size(), 3);
+    }
     std::vector<char> path1 = tree.getPerm1(1);
     ASSERT_EQ(path1.size(), 3);
     std::vector<char> path2 = tree.getPerm2(2);
