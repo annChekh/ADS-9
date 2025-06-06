@@ -15,6 +15,11 @@ PMTree::Node::~Node() {
 }
 
 PMTree::PMTree(const std::vector<char>& elems) : root(new Node('\0')) {
+    if (elems.empty()) {
+        delete root;
+        root = nullptr;
+        return;
+    }
     std::vector<std::vector<char>> path;
     generatePerms(root, const_cast<std::vector<char>&>(elems), path);
 }
@@ -26,7 +31,7 @@ PMTree::~PMTree() {
 void PMTree::clear(Node* node) {
     if (!node) return;
     for (Node* child : node->children) {
-        clear(child);
+        if (child) clear(child);
     }
     delete node;
 }
@@ -64,7 +69,6 @@ bool PMTree::getPerm1Helper(Node* node, int& count, int num,
     if (count >= num) return true;
     if (node->children.empty()) {
         if (++count == num) {
-            path.push_back(node->value);
             return true;
         }
         return false;
