@@ -31,7 +31,7 @@ void PMTree::generatePerms(Node* node, std::vector<char>& current,
         Node* child = new Node(elem);
         node->children.push_back(child);
         std::vector<char> remaining = current;
-        remaining.erase(std::remove(remaining.begin(), remaining.end(), elem), 
+        remaining.erase(std::remove(remaining.begin(), remaining.end(), elem),
                        remaining.end());
         generatePerms(child, remaining, result);
     }
