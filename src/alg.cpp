@@ -7,12 +7,21 @@
 #include  <vector>
 #include  "tree.h"
 PMTree::PMTree(const std::vector<char>& elems) : root(new Node('\0')) {
+    if (elems.empty()) return;
     std::vector<std::vector<char>> temp;
     generatePerms(root, const_cast<std::vector<char>&>(elems), temp);
 }
 
 PMTree::~PMTree() {
     clear(root);
+}
+
+void PMTree::clear(Node* node) {
+    if (!node) return;
+    for (Node* child : node->children) {
+        clear(child);
+    }
+    delete node;
 }
 
 PMTree::Node::Node(char val) : value(val) {}
@@ -110,9 +119,11 @@ void PMTree::clear(Node* node) {
 }
 
 std::vector<char> getPerm1(PMTree& tree, int num) {
+    if (num <= 0) return {};
     return tree.getPerm1(num);
 }
 
 std::vector<char> getPerm2(PMTree& tree, int num) {
+    if (num <= 0) return {};
     return tree.getPerm2(num);
 }
