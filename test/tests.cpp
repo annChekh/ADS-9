@@ -4,33 +4,34 @@
 #include <vector>
 
 #include "tree.h"
-
-TEST(ads9_test1, basic) {
-    std::vector<char> elements = {'1', '2', '3'};
+TEST(PMTreeTest, BasicPermutations) {
+    std::vector<char> elements = {'A', 'B', 'C'};
     PMTree tree(elements);
-    std::vector<char> result = tree.getPerm1(1);
-    ASSERT_FALSE(result.empty());
-    ASSERT_EQ(result.size(), 3);
+    auto all_perms = tree.getAllPerms();
+    ASSERT_EQ(all_perms.size(), 6);
+    std::vector<char> perm1 = tree.getPerm1(1);
+    ASSERT_EQ(perm1.size(), 3);
+    std::vector<char> perm2 = tree.getPerm2(2);
+    ASSERT_EQ(perm2.size(), 3);
 }
 
-TEST(ads9_test2, basic) {
-    std::vector<char> elements = {'1', '2', '3'};
-    PMTree tree(elements);
-    std::vector<char> result = tree.getPerm2(2);
-    ASSERT_FALSE(result.empty());
-    ASSERT_EQ(result.size(), 3);
+TEST(PMTreeTest, EdgeCases) {
+    {
+        PMTree empty_tree({});
+        auto perms = empty_tree.getAllPerms();
+        ASSERT_TRUE(perms.empty());
+    }
+    {
+        PMTree single_tree({'X'});
+        auto perms = single_tree.getAllPerms();
+        ASSERT_EQ(perms.size(), 1);
+        ASSERT_EQ(perms[0].size(), 1);
+    }
 }
 
-TEST(ads9_test3, basic) {
-    std::vector<char> elements = {'1', '2', '3'};
+TEST(PMTreeTest, InvalidRequests) {
+    std::vector<char> elements = {'1', '2'};
     PMTree tree(elements);
-    std::vector<char> result = tree.getPerm1(6);
-    ASSERT_TRUE(result.empty());  // Для несуществующей перестановки
-}
-
-TEST(ads9_test4, basic) {
-    std::vector<char> elements = {'1', '2', '3'};
-    PMTree tree(elements);
-    std::vector<char> result = tree.getPerm2(8);
-    ASSERT_TRUE(result.empty());  // Для несуществующей перестановки
+    ASSERT_TRUE(tree.getPerm1(5).empty());
+    ASSERT_TRUE(tree.getPerm2(0).empty());
 }
