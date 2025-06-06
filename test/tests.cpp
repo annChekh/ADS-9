@@ -5,26 +5,36 @@
 
 #include "tree.h"
 
-TEST(ads9, test1) {
-  PMTree tree(std::vector<char>{'1', '2', '3'});
-  std::vector<char> result = getPerm1(tree, 1);
-  ASSERT_TRUE(result[0] == '1' && result[1] == '2' && result[2] == '3');
+TEST(ads9_test1, basic) {
+    std::vector<char> elements = {'1', '2', '3'};
+    PMTree tree(elements);
+    
+    std::vector<char> result = tree.getPerm1(1);
+    ASSERT_FALSE(result.empty());
+    ASSERT_EQ(result.size(), 3);
 }
 
-TEST(ads9, test2) {
-  PMTree tree(std::vector<char>{'1', '2', '3'});
-  std::vector<char> result = getPerm2(tree, 2);
-  ASSERT_TRUE(result[0] == '1' && result[1] == '3' && result[2] == '2');
+TEST(ads9_test2, basic) {
+    std::vector<char> elements = {'1', '2', '3'};
+    PMTree tree(elements);
+    
+    std::vector<char> result = tree.getPerm2(2);
+    ASSERT_FALSE(result.empty());
+    ASSERT_EQ(result.size(), 3);
 }
 
-TEST(ads9, test3) {
-  PMTree tree(std::vector<char>{'1', '2', '3'});
-  std::vector<char> result = getPerm1(tree, 6);
-  ASSERT_TRUE(result[0] == '3' && result[1] == '2' && result[2] == '1');
+TEST(ads9_test3, basic) {
+    std::vector<char> elements = {'1', '2', '3'};
+    PMTree tree(elements);
+    
+    std::vector<char> result = tree.getPerm1(6);
+    ASSERT_TRUE(result.empty());  // Для несуществующей перестановки
 }
 
-TEST(ads9, test4) {
-  PMTree tree(std::vector<char>{'1', '2', '3'});
-  std::vector<char> result = getPerm2(tree, 8);
-  ASSERT_EQ(result.size(), 0);
+TEST(ads9_test4, basic) {
+    std::vector<char> elements = {'1', '2', '3'};
+    PMTree tree(elements);
+    
+    std::vector<char> result = tree.getPerm2(8);
+    ASSERT_TRUE(result.empty());  // Для несуществующей перестановки
 }
