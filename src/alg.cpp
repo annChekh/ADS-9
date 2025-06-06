@@ -7,9 +7,11 @@
 #include  <vector>
 #include  "tree.h"
 PMTree::PMTree(const std::vector<char>& elems) : root(new Node('\0')) {
-    if (elems.empty()) return;
-    std::vector<std::vector<char>> temp;
-    generatePerms(root, const_cast<std::vector<char>&>(elems), temp);
+    if (elems.empty() || !root) {
+        return;
+    }
+    std::vector<char> elements_copy = elems;
+    generatePerms(root, elements_copy);
 }
 
 PMTree::~PMTree() {
