@@ -58,11 +58,11 @@ std::vector<char> PMTree::getPerm1(int num) const {
     return path;
 }
 
-bool PMTree::getPerm1Helper(Node* node, int& count, int target,
+bool PMTree::getPerm1Helper(Node* node, int& count, int num,
                            std::vector<char>& path) const {
     if (count >= num) return true;
     if (node->children.empty()) {
-        if (++count == target) {
+        if (++count == num) {
             path.push_back(node->value);
             return true;
         }
@@ -70,7 +70,7 @@ bool PMTree::getPerm1Helper(Node* node, int& count, int target,
     }
     for (Node* child : node->children) {
         path.push_back(child->value);
-        if (getPerm1Helper(child, count, target, path)) return true;
+        if (getPerm1Helper(child, count, num, path)) return true;
         path.pop_back();
     }
     return false;
@@ -83,11 +83,11 @@ std::vector<char> PMTree::getPerm2(int num) const {
     return path;
 }
 
-bool PMTree::getPerm2Helper(Node* node, int& count, int target,
+bool PMTree::getPerm2Helper(Node* node, int& count, int num,
                            std::vector<char>& path) const {
     if (count >= num) return true;
     if (node->children.empty()) {
-        if (++count == target) {
+        if (++count == num) {
             path.push_back(node->value);
             return true;
         }
@@ -95,7 +95,7 @@ bool PMTree::getPerm2Helper(Node* node, int& count, int target,
     }
     for (Node* child : node->children) {
         path.push_back(child->value);
-        if (getPerm2Helper(child, count, target, path)) return true;
+        if (getPerm2Helper(child, count, num, path)) return true;
         path.pop_back();
     }
     return false;
