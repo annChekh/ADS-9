@@ -19,7 +19,7 @@ class PMTree {
         ~Node();
     };
     Node* root;
-    void generatePerms(Node* node, std::vector<char>& elems, 
+    void generatePerms(Node* node, std::vector<char>& elems,
                       std::vector<std::vector<char>>& path) const;
     bool getPerm1Helper(Node* node, int& count, int target,
                        std::vector<char>& path) const;
