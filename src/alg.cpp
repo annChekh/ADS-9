@@ -31,8 +31,8 @@ void PMTree::expand(TreeNode* node, std::vector<char> rem) {
 }
 
 void PMTree::traverse(TreeNode* node,
-                      std::vector<char>& path,
-                      std::vector<std::vector<char>>& out) {
+                     std::vector<char>& path,
+                     std::vector<std::vector<char>>& out) {
     if (node->label != ' ')
         path.push_back(node->label);
     if (node->subnodes.empty()) {
@@ -45,24 +45,11 @@ void PMTree::traverse(TreeNode* node,
         path.pop_back();
 }
 
-std::vector<std::vector<char>> getAllPerms(PMTree& tree) {
-    std::vector<std::vector<char>> output;
-    std::vector<char> temp;
-    tree.traverse(tree.base, temp, output);
-    return output;
-}
-
-std::vector<char> getPerm1(PMTree& tree, int num) {
-    auto perms = getAllPerms(tree);
-    return(num > 0 && num <= perms.size()) ?
-        perms[num-1] : std::vector<char>{};
-}
-
 std::vector<char> PMTree::fetch_by_order(TreeNode* node, int& count, int num) {
     if (node->subnodes.empty()) {
         ++count;
-        return(count == num) ? std::vector<char>{node->label}
-            : std::vector<char>{};
+        return (count == num) ? std::vector<char>{node->label} 
+                             : std::vector<char>{};
     }
     for (auto sn : node->subnodes) {
         auto res = fetch_by_order(sn, count, num);
@@ -74,6 +61,20 @@ std::vector<char> PMTree::fetch_by_order(TreeNode* node, int& count, int num) {
         }
     }
     return {};
+}
+
+// Friend-функции реализованы вне класса
+std::vector<std::vector<char>> getAllPerms(PMTree& tree) {
+    std::vector<std::vector<char>> output;
+    std::vector<char> temp;
+    tree.traverse(tree.base, temp, output);
+    return output;
+}
+
+std::vector<char> getPerm1(PMTree& tree, int num) {
+    auto perms = getAllPerms(tree);
+    return (num > 0 && num <= perms.size()) ? perms[num-1] 
+                                          : std::vector<char>{};
 }
 
 std::vector<char> getPerm2(PMTree& tree, int num) {
