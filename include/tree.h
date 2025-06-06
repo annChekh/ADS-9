@@ -12,10 +12,9 @@ class PMTree {
 
  private:
     struct Node {
+      char value;
+      std::vector<Node*> children;
       explicit Node(char val);
-        ~Node();
-        char value;
-        std::vector<Node*> children;
     };
 
     Node* root;
